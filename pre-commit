@@ -1,20 +1,14 @@
 #! /usr/bin/env bash
 
-# TODO 使用awk把路径包含进去
-cc_files=$(git diff --cached --name-status *.cc)
-cxx_files=$(git diff --cached --name-status *.cxx)
-cpp_files=$(git diff --cached --name-status *.cpp)
-c_files=$(git diff --cached --name-status *.c)
+# 使用awk把路径包含进去
+raw_index_files=$(git diff --cached --raw)
+index_files=$(echo "${raw_index_files}" | awk 'BEGIN {FS=" "}/(.c$)|(.cpp$)|(.cc$)|(.cxx$)|(.h$)|(.hpp$)/{print $6}')
 
 ret_code=0
 str_done='Done processing'
 
-files=(${cc_files} ${cxx_files} ${cpp_files} ${c_files})
-
-
-for ele in ${files[@]}
+for ele in ${index_files}
 do
-    echo ${ele}
     res=`cpplint ${ele} 2>&1`
     sub_res=${res:0:15}
     if [ "${sub_res}" != "${str_done}" ]; then
@@ -32,5 +26,4 @@ else
     echo ".............. COMMIT SUCCESS .............."
 fi
 
-ret_code=1
 exit ${ret_code}
