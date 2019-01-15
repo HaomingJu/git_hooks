@@ -1,0 +1,36 @@
+#! /usr/bin/env bash
+
+# TODO 使用awk把路径包含进去
+cc_files=$(git diff --cached --name-status *.cc)
+cxx_files=$(git diff --cached --name-status *.cxx)
+cpp_files=$(git diff --cached --name-status *.cpp)
+c_files=$(git diff --cached --name-status *.c)
+
+ret_code=0
+str_done='Done processing'
+
+files=(${cc_files} ${cxx_files} ${cpp_files} ${c_files})
+
+
+for ele in ${files[@]}
+do
+    echo ${ele}
+    res=`cpplint ${ele} 2>&1`
+    sub_res=${res:0:15}
+    if [ "${sub_res}" != "${str_done}" ]; then
+        echo "${res}"
+        ret_code=1
+        break
+    fi
+done
+
+
+# 根据返回值进行提示性输出
+if [ ${ret_code} -eq 1 ]; then
+    echo ".............. COMMIT FAILURE .............."
+else
+    echo ".............. COMMIT SUCCESS .............."
+fi
+
+ret_code=1
+exit ${ret_code}
