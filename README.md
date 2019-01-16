@@ -1,4 +1,7 @@
 # 1. 功能
+
+**用于团队C/C++代码质量的本地管控, 以Cpplint对代码进行静态检查.**
+
 激活git hooks(钩子)脚本`pre-commit`
 
 在键入命令`git commit`后, 在执行之前自动触发该钩子脚本.
@@ -59,6 +62,16 @@ Total errors found: 1
 意味着文件不符合cpplint的要求: **a.c line:0 没有权利声明**
 
 将全部文件修正过后方可顺利提交入仓库.
+
+
+**越过钩子脚本检查**
+
+当遇到特殊情况来不及进行cpplint静态检查又急于进行提交时, 可以通过添加参数 ` --no-verify`或者 `-n` 来越过检查.
+
+```
+git commit --no-verify
+git commit -n
+```
 
 
 
