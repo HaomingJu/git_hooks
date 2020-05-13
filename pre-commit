@@ -2,7 +2,7 @@
 
 # 使用awk把路径包含进去
 raw_index_files=$(git diff --cached --raw)
-index_files=$(echo "${raw_index_files}" | awk 'BEGIN {FS=" "}/(.c$)|(.cpp$)|(.cc$)|(.cxx$)|(.h$)|(.hpp$)/{print $6}')
+index_files=$(echo "${raw_index_files}" | awk 'BEGIN {FS=" "}/(\.c$)|(\.cpp$)|(\.cc$)|(\.cxx$)|(\.h$)|(\.hpp$)/{print $6}')
 
 ret_code=0
 str_done='Done processing'
