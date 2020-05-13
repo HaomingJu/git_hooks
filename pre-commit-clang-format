@@ -1,0 +1,19 @@
+#! /usr/bin/env bash
+
+# 使用awk把路径包含进去
+raw_index_files=$(git diff --cached --raw)
+index_files=$(echo "${raw_index_files}" | awk 'BEGIN {FS=" "}/(\.c$)|(\.cpp$)|(\.cc$)|(\.cxx$)|(\.h$)|(\.hpp$)/{print $6}')
+
+str_done='Done processing'
+
+for ele in ${index_files}
+do
+    res=`clang-format-3.8 -i -style=file ${ele} 2>&1`
+    res=`git add ${ele}`
+    echo "clang-format-3.8 -i -style=file ${ele}"
+done
+echo "Hi, Have a nice day!"
+
+
+
+exit 0
